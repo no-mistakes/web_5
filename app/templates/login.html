@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Форма авторизации</h2>
+
+<form method="post" class="mb-3">
+  <div class="mb-3">
+    <label class="form-label">Логин</label>
+    <input type="text" name="username" class="form-control" value="{{ username or '' }}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Пароль</label>
+    <input type="password" name="password" class="form-control" value="{{ password or '' }}">
+  </div>
+  <button type="submit" class="btn btn-primary">Войти</button>
+</form>
+
+{% if username is not none and password is not none %}
+<div class="alert alert-secondary">
+  Введено: <strong>{{ username }}</strong> / <strong>{{ password }}</strong>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% macro user_form(values, errors, roles, show_login_password) %}
+<div class="row g-3">
+    {% if show_login_password %}
+    <div class="col-md-6">
+        <label class="form-label">Логин*</label>
+        <input class="form-control {{ 'is-invalid' if errors.get('login') }}" name="login" value="{{ values.get('login','') }}">
+        {% if errors.get('login') %}<div class="invalid-feedback">{{ errors['login'] }}</div>{% endif %}
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Пароль*</label>
+        <input type="password" class="form-control {{ 'is-invalid' if errors.get('password') }}" name="password">
+        {% if errors.get('password') %}<div class="invalid-feedback">{{ errors['password'] }}</div>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="col-md-4">
+        <label class="form-label">Фамилия</label>
+        <input class="form-control {{ 'is-invalid' if errors.get('last_name') }}" name="last_name" value="{{ values.get('last_name','') }}">
+        {% if errors.get('last_name') %}<div class="invalid-feedback">{{ errors['last_name'] }}</div>{% endif %}
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Имя*</label>
+        <input class="form-control {{ 'is-invalid' if errors.get('first_name') }}" name="first_name" value="{{ values.get('first_name','') }}">
+        {% if errors.get('first_name') %}<div class="invalid-feedback">{{ errors['first_name'] }}</div>{% endif %}
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Отчество</label>
+        <input class="form-control {{ 'is-invalid' if errors.get('middle_name') }}" name="middle_name" value="{{ values.get('middle_name','') }}">
+        {% if errors.get('middle_name') %}<div class="invalid-feedback">{{ errors['middle_name'] }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Роль</label>
+        <select class="form-select {{ 'is-invalid' if errors.get('role_id') }}" name="role_id">
+            <option value="0">(без роли)</option>
+            {% for r in roles %}
+            {% set sel = 'selected' if (values.get('role_id')|int == r.id) else '' %}
+            <option value="{{ r.id }}" {{ sel }}>{{ r.name }}</option>
+            {% endfor %}
+        </select>
+        {% if errors.get('role_id') %}<div class="invalid-feedback">{{ errors['role_id'] }}</div>{% endif %}
+    </div>
+</div>
+<div class="mt-3 d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Сохранить</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('index') }}">Отмена</a>
+</div>
+{% endmacro %}

@@ -1,0 +1,104 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <title>
+        {% if title %}{{ title }}{% else %}Лабораторная работа №1{% endif %}
+    </title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('index') }}">Лабораторная работа № 1</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Задание</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('posts') }}">Посты</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">Об авторе</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('lab2') }}">ЛР2</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('counter') }}">Счётчик</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('reports_index') }}">Журнал посещений</a></li>
+
+                        {% if current_user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('secret') }}">Секретная</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('change_password') }}">Изменить пароль</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth_logout') }}">Выход ({{ current_user.login }})</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth_login') }}">Вход</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="my-3">
+        <div class="container">
+            {% with msgs = get_flashed_messages(with_categories=true) %}
+            {% if msgs %}
+            {% for cat, msg in msgs %}
+            <div class="alert alert-{{ 'info' if cat=='message' else cat }} alert-dismissible fade show" role="alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}
+            <h1>Содержимое по умолчанию</h1>
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- ЛР-4: модалка удаления -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="confirmDeleteForm" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmDeleteText">Вы уверены?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                    <button type="submit" class="btn btn-danger">Да</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-light border-top py-3 mt-5">
+        <div class="text-muted small container">
+            Бабкина Юлия Группа: 231-351
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='main.js') }}" defer></script>
+
+    <script>
+        // Глобальный хэндлер открытия модалки удаления
+        window.addEventListener('lr4:confirmDelete', (e) => {
+            const { uid, fio } = e.detail;
+            const text = document.getElementById('confirmDeleteText');
+            const form = document.getElementById('confirmDeleteForm');
+            text.textContent = `Вы уверены, что хотите удалить пользователя ${fio}?`;
+            form.action = `/users/${uid}/delete`;
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            modal.show();
+        });
+    </script>
+</body>
+</html>

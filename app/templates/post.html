@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<article class="post">
+  <h1 class="mb-3">{{ post.title }}</h1>
+
+  <div class="text-muted mb-2">
+    Автор: {{ post.author }} ·
+    Дата: {{ post.date.strftime('%d.%m.%Y %H:%M') }}
+  </div>
+
+  <img class="img-fluid mb-3"
+       src="{{ url_for('static', filename='images/' ~ post.image_id) }}"
+       alt="Изображение поста">
+
+  <div class="mb-4">{{ post.text }}</div>
+
+  <hr>
+
+  <h5 class="mt-4 mb-3">Оставьте комментарий</h5>
+  <form method="post">
+    <div class="mb-3">
+      <textarea class="form-control" name="text" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+  </form>
+
+  <hr class="my-4">
+
+  <h5 class="mb-3">Комментарии</h5>
+
+  {% macro render_comments(items, level=0) -%}
+    <ul class="list-unstyled ms-{{ 3*level }}">
+      {% for c in items %}
+        <li class="mb-3">
+          <div class="fw-semibold">{{ c.author }}</div>
+          <div>{{ c.text }}</div>
+          {% if c.replies %}
+            {{ render_comments(c.replies, level+1) }}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {%- endmacro %}
+
+  {{ render_comments(post.comments) }}
+</article>
+
+{% endblock %}

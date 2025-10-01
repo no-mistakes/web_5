@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>ЛР2</h2>
+<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Параметры URL
+    <a class="btn btn-sm btn-outline-primary"
+       href="{{ url_for('show_url') }}?x=1&y=abc">Открыть с примером</a>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Заголовки запроса
+    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('show_headers') }}">Открыть</a>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Cookie
+    <div>
+      <a class="btn btn-sm btn-outline-secondary me-2" href="{{ url_for('set_test_cookie') }}">Поставить тестовую cookie</a>
+      <a class="btn btn-sm btn-outline-primary" href="{{ url_for('show_cookies') }}">Показать</a>
+    </div>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Форма авторизации
+    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('login') }}">Открыть</a>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Проверка телефона
+    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('phone') }}">Открыть</a>
+  </li>
+</ul>
+{% endblock %}
