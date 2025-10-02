@@ -1,12 +1,11 @@
 click==8.0.4
 Faker==13.3.2
 Flask==2.0.3
-itsdangerous==2.1.1
+Flask-Login==0.6.3
+Flask-SQLAlchemy==2.5.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
-python-dateutil==2.8.2
-six==1.16.0
+itsdangerous==2.1.1
 Werkzeug==2.0.3
-Flask-SQLAlchemy==2.5.1
-gunicorn
-Flask-Login==0.6.3
+SQLAlchemy==1.4.49
+gunicorn==23.0.0
